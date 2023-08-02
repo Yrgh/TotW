@@ -1,0 +1,152 @@
+[gd_scene load_steps=20 format=3 uid="uid://bx3ma6cs66ldl"]
+
+[ext_resource type="Script" path="res://Scripts/CharacterController.gd" id="1_rivt2"]
+[ext_resource type="Script" path="res://Scripts/Stamina.gd" id="2_f0rwg"]
+[ext_resource type="Texture2D" uid="uid://cnoq8ony7i7xv" path="res://texture_leafy_grass/leafy_grass_diff_1k.png" id="3_q6a8n"]
+[ext_resource type="Texture2D" uid="uid://bm34v6dftvlvu" path="res://texture_leafy_grass/leafy_grass_nor_gl_1k.png" id="4_cl4v6"]
+[ext_resource type="Texture2D" uid="uid://bf6a7oxu3kogs" path="res://texture_leafy_grass/leafy_grass_rough_1k.png" id="5_ysswc"]
+[ext_resource type="Texture2D" uid="uid://dixvbs6rtltbc" path="res://texture_mossy_cobble/mossy_cobblestone_diff_1k.png" id="6_hwvwr"]
+[ext_resource type="Texture2D" uid="uid://qdv035vorme3" path="res://texture_mossy_cobble/mossy_cobblestone_nor_gl_1k.png" id="7_7mppv"]
+[ext_resource type="Texture2D" uid="uid://vwkedomx7d7o" path="res://texture_mossy_cobble/mossy_cobblestone_rough_1k.png" id="8_ftdfe"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xc8ji"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_0evve"]
+sky_material = SubResource("ProceduralSkyMaterial_xc8ji")
+
+[sub_resource type="Environment" id="Environment_3k1pk"]
+background_mode = 2
+sky = SubResource("Sky_0evve")
+tonemap_mode = 2
+ssao_enabled = true
+glow_enabled = true
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_41vs4"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_17pys"]
+points = PackedVector3Array(-0.125207, -0.532801, -0.480507, 0.0227831, 0.47607, 0.498884, 0.169713, 0.559144, 0.464172, 0.231051, -0.803591, 0.320455, 0.40741, 0.651043, -0.243523, -0.482789, 0.594843, 0.0822132, -0.362868, -0.682312, 0.289697, 0.469044, -0.654529, -0.0662713, -0.127444, 0.842701, -0.338103, -0.393435, -0.683942, -0.244717, 0.438255, 0.623309, 0.200849, 0.0841477, 0.977454, 0.114795, -0.0682023, -0.976458, -0.12927, 0.20055, -0.563129, -0.451454, -0.185527, 0.595453, -0.453475, -0.273363, 0.592268, 0.407754, -0.00693649, -0.476823, 0.49966, 0.375821, -0.588614, 0.316955, 0.111579, 0.563059, -0.481177, -0.41725, 0.527866, -0.270497, -0.484546, -0.596972, -0.0665097, -0.279747, 0.908561, 0.0533361, -0.250197, -0.880712, 0.205319, 0.263647, -0.902771, -0.127394, 0.293368, 0.871526, -0.157196, 0.373412, -0.526319, -0.328246, 0.499663, 0.476641, -0.00688856, 0.0531056, 0.875001, 0.324703, -0.154543, -0.590854, 0.465879, -0.0972799, -0.782358, -0.398188, -0.387649, -0.498171, 0.31565, -0.30068, -0.587995, -0.388901)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t4qs2"]
+albedo_texture = ExtResource("3_q6a8n")
+roughness_texture = ExtResource("5_ysswc")
+normal_enabled = true
+normal_texture = ExtResource("4_cl4v6")
+uv1_scale = Vector3(50, 50, 50)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_m5p1d"]
+resource_local_to_scene = true
+resource_name = "MossyCobble"
+material = SubResource("StandardMaterial3D_t4qs2")
+size = Vector2(200, 200)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_181na"]
+data = PackedVector3Array(100, 0, 100, -100, 0, 100, 100, 0, -100, -100, 0, 100, -100, 0, -100, 100, 0, -100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r17cu"]
+resource_local_to_scene = true
+albedo_texture = ExtResource("6_hwvwr")
+roughness_texture = ExtResource("8_ftdfe")
+normal_enabled = true
+normal_texture = ExtResource("7_7mppv")
+subsurf_scatter_skin_mode = true
+backlight = Color(1, 1, 1, 1)
+uv1_scale = Vector3(1, 5, 1)
+uv1_triplanar_sharpness = 150.0
+uv1_world_triplanar = true
+uv2_scale = Vector3(0.2, 0.2, 0.2)
+uv2_triplanar_sharpness = 150.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_1wujc"]
+lightmap_size_hint = Vector2i(14, 36)
+material = SubResource("StandardMaterial3D_r17cu")
+size = Vector3(1, 2.5, 1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_u3wab"]
+data = PackedVector3Array(-0.5, 1.25, 0.5, 0.5, 1.25, 0.5, -0.5, -1.25, 0.5, 0.5, 1.25, 0.5, 0.5, -1.25, 0.5, -0.5, -1.25, 0.5, 0.5, 1.25, -0.5, -0.5, 1.25, -0.5, 0.5, -1.25, -0.5, -0.5, 1.25, -0.5, -0.5, -1.25, -0.5, 0.5, -1.25, -0.5, 0.5, 1.25, 0.5, 0.5, 1.25, -0.5, 0.5, -1.25, 0.5, 0.5, 1.25, -0.5, 0.5, -1.25, -0.5, 0.5, -1.25, 0.5, -0.5, 1.25, -0.5, -0.5, 1.25, 0.5, -0.5, -1.25, -0.5, -0.5, 1.25, 0.5, -0.5, -1.25, 0.5, -0.5, -1.25, -0.5, 0.5, 1.25, 0.5, -0.5, 1.25, 0.5, 0.5, 1.25, -0.5, -0.5, 1.25, 0.5, -0.5, 1.25, -0.5, 0.5, 1.25, -0.5, -0.5, -1.25, 0.5, 0.5, -1.25, 0.5, -0.5, -1.25, -0.5, 0.5, -1.25, 0.5, 0.5, -1.25, -0.5, -0.5, -1.25, -0.5)
+
+[node name="MainScene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_3k1pk")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.0262636, -0.600502, 0.799191, 0.220081, 0.776378, 0.590593, -0.975128, 0.191398, 0.111769, 0, 0, 0)
+shadow_enabled = true
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+script = ExtResource("1_rivt2")
+
+[node name="Player" type="MeshInstance3D" parent="CharacterBody3D"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_41vs4")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("ConvexPolygonShape3D_17pys")
+
+[node name="Neck" type="Node3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.50712, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Neck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.188275, 0)
+
+[node name="UI" type="Node2D" parent="."]
+
+[node name="StaminaBar" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 400.0
+offset_top = 550.0
+offset_right = 400.0
+offset_bottom = 550.0
+
+[node name="Back" type="ColorRect" parent="UI/StaminaBar"]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 70.0
+color = Color(0, 0, 0, 1)
+
+[node name="Static" type="ColorRect" parent="UI/StaminaBar"]
+z_index = 1
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 160.0
+offset_bottom = 60.0
+color = Color(0.435294, 0.835294, 0, 1)
+
+[node name="Dynamic" type="ColorRect" parent="UI/StaminaBar"]
+z_index = 2
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 160.0
+offset_bottom = 60.0
+color = Color(0.717647, 0.745098, 0.545098, 1)
+script = ExtResource("2_f0rwg")
+
+[node name="Static" type="Node3D" parent="."]
+
+[node name="Ground" type="MeshInstance3D" parent="Static"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0, 0)
+rotation_order = 5
+mesh = SubResource("PlaneMesh_m5p1d")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Static/Ground"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Ground/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_181na")
+
+[node name="Walls" type="MeshInstance3D" parent="Static"]
+transform = Transform3D(0.999525, 0, 0, 0, 4.99763, 0, 0, 0, 0.999525, 2.078, 6.25, -2.081)
+mesh = SubResource("BoxMesh_1wujc")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Static/Walls"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Static/Walls/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_u3wab")
