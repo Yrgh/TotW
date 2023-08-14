@@ -21,6 +21,8 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var body := $Guy
 @onready var eyes := $Eyes
 @onready var container := $'..'
+@onready var fpsText := $'../../UI/FPSDisplay'
+
 
 func diamond(v: Vector2):
 	if v.x != 0 && v.y != 0:
@@ -30,7 +32,7 @@ func diamond(v: Vector2):
 
 func fix_alignment() -> void:
 	var id = diamond(Input.get_vector("left", "right", "forward", "backward"))
-	var wasd = id.x != 0 || id.y != 0
+	var wasd = (id.x != 0 || id.y != 0)
 	if head.spring_length <= .6 || (wasd&&is_on_floor()):
 		rotate_y(eyes.rotation.y)
 		eyes.rotation.y = 0
@@ -62,11 +64,14 @@ func get_horiz_speed(v: Vector3) -> float:
 	return Vector2(v.x,v.z).length()
 
 const walkMult = PI*POWER_MULTIPLIER
+var physicsFPS
 func _physics_process(delta: float) -> void:
 	clamp_cam()
 	fix_alignment()
 	
 	var fov
+	
+	physicsFPS = 1/delta
 	
 	if Input.is_action_just_pressed('focus(toggle)'):
 		if Global.ATSon:
@@ -94,13 +99,13 @@ func _physics_process(delta: float) -> void:
 	Global.cameraDist = clamp(Global.cameraDist,.1,7.5)
 	
 	if head.spring_length <= .6:
-		body.visible = false
+		body.transparency = 1
 	else:
-		body.visible = true
+		body.transparency = 0
 	
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	var wasd = input_dir.x != 0 || input_dir.y != 0
+	var wasd = (input_dir.x != 0 || input_dir.y != 0)
 	
 	var speed
 	if Global.staminaOut:
@@ -147,7 +152,7 @@ func _physics_process(delta: float) -> void:
 		if !wasd:
 			velocity.x *= .5
 			velocity.z *= .5
-		if direction:
+		elif direction:
 			fov += 5
 				
 			velocity.x += direction.x * speed * POWER_MULTIPLIER * .5
@@ -164,7 +169,7 @@ func _physics_process(delta: float) -> void:
 		velocity = f_to_v3(0)
 		Global.reset()
 	
-	Global.climbLastFrame = Input.is_action_pressed("jump") && !Global.staminaOut && !is_on_floor() && (wallClimb || Global.climbLastFrame)
+	Global.climbLastFrame = Input.is_action_pressed("jump") && !Global.staminaOut && !(is_on_floor()||is_on_ceiling_only()) && (wallClimb || Global.climbLastFrame)
 	
 	if wasd && is_on_floor():
 		Global.walkTime += delta
@@ -180,3 +185,6 @@ func _physics_process(delta: float) -> void:
 	$'Eyes/Camera SpringArm/Camera'.fov = Global.FOV.upd(delta,fov)
 	
 	move_and_slide()
+
+func _process(delta: float) -> void:
+	fpsText.text = "FPS(Graphics): " + str(1/delta) +"\nFPS(Physics): " + str(physicsFPS)

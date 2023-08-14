@@ -24,7 +24,7 @@ var ATSon = false
 
 const FOV_F = 2.5
 const FOV_ZETA = 0.2
-const FOV_R = 1.2
+const FOV_R = 1.0
 
 var FOV = BetterAnimation.new(CD_F,CD_ZETA,CD_R,80)
 
