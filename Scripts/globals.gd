@@ -3,7 +3,7 @@ extends Node
 var stamina = 100.0
 var staminaOut = false
 
-const CD_F = 1.0
+const CD_F = 1.5
 const CD_ZETA = 0.8
 const CD_R = 1.5
 
@@ -19,6 +19,15 @@ var StaminaBarPad
 
 var walkTime = 0
 
+var applicableTimeScale = 1
+var ATSon = false
+
+const FOV_F = 2.5
+const FOV_ZETA = 0.2
+const FOV_R = 1.2
+
+var FOV = BetterAnimation.new(CD_F,CD_ZETA,CD_R,80)
+
 func update_vars():
 	ScreenSize = get_window().get_size()
 	StaminaBarSize = Vector2(3*ScreenSize.x/30,ScreenSize.x/30)
@@ -29,6 +38,8 @@ func reset():
 	staminaOut = false
 	stamina = 100.0
 	walkTime = 0
+	applicableTimeScale = 1
+	ATSon = false
 
 class BetterAnimation:
 	var xp : float

@@ -66,6 +66,24 @@ func _physics_process(delta: float) -> void:
 	clamp_cam()
 	fix_alignment()
 	
+	var fov
+	
+	if Input.is_action_just_pressed('focus(toggle)'):
+		if Global.ATSon:
+			Global.ATSon = false
+		else:
+			Global.ATSon = true
+	
+	if (Input.is_action_pressed('focus(hold)') || Global.ATSon) && !Global.staminaOut:
+		Global.applicableTimeScale = .125
+		Global.stamina -= delta * 21
+		fov = 60
+	else:
+		Global.applicableTimeScale = 1
+		fov = 80
+	
+	delta *= Global.applicableTimeScale
+	
 	head.spring_length = Global.animCD.upd(delta,Global.cameraDist)
 	
 	if Input.is_action_just_pressed('zoom_in'):
@@ -87,12 +105,14 @@ func _physics_process(delta: float) -> void:
 	var speed
 	if Global.staminaOut:
 		speed = TIRED_SPEED
+		fov -= 5
 	else:
 		speed = BASE_SPEED
 	
 	if is_on_floor() && Input.is_action_pressed("sprint") && input_dir.y < 0 && Global.stamina > 0 && !Global.staminaOut:
 		speed = SPRINT_SPEED
 		Global.stamina -= 24 * delta
+		fov += 15
 	
 	var wallClimb := is_on_wall() && Input.is_action_pressed("jump") && !Global.staminaOut
 	
@@ -118,7 +138,7 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("jump") && is_on_floor() && Global.stamina > 0 && !Global.staminaOut:
 		velocity.y = JUMP_VELOCITY  * POWER_MULTIPLIER
 		speed += JUMP_SPEED_BONUS
-		Global.stamina -= 7 
+		Global.stamina -= 7
 		
 	Global.stamina = clamp(Global.stamina,-1,100)
 	
@@ -128,6 +148,8 @@ func _physics_process(delta: float) -> void:
 			velocity.x *= .5
 			velocity.z *= .5
 		if direction:
+			fov += 5
+				
 			velocity.x += direction.x * speed * POWER_MULTIPLIER * .5
 			velocity.z += direction.z * speed * POWER_MULTIPLIER * .5
 			#.5 is for balancing
@@ -154,5 +176,7 @@ func _physics_process(delta: float) -> void:
 		eyes.position.y = .05*sin(inp) + .02*cos(inp*.5)
 		eyes.rotation.z = .01*sin(inp*.5)
 		eyes.position.x = .02*cos(inp*.5)
+	
+	$'Eyes/Camera SpringArm/Camera'.fov = Global.FOV.upd(delta,fov)
 	
 	move_and_slide()
