@@ -28,6 +28,22 @@ const FOV_R = 1.0
 
 var FOV = BetterAnimation.new(CD_F,CD_ZETA,CD_R,80)
 
+var currentScene = null
+
+func _ready() -> void:
+	var root = get_tree().root
+	currentScene = root.get_child(root.get_child_count() - 1)
+
+func change_scene(path) -> void:
+	call_deferred("_deferred_goto_scene", path)
+
+func _deferred_goto_scene(path) -> void:
+	currentScene.free()
+	var s = ResourceLoader.load(path)
+	currentScene = s.instantiate()
+	get_tree().root.add_child(currentScene)
+	get_tree().current_scene = currentScene
+
 func update_vars():
 	ScreenSize = get_window().get_size()
 	StaminaBarSize = Vector2(3*ScreenSize.x/30,ScreenSize.x/30)

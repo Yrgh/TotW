@@ -12,7 +12,7 @@ const JUMP_VELOCITY = 1.5
 #Although the character is already above-average,
 #we multiply their attributes to make the player
 #feel more powerful and not slow
-const POWER_MULTIPLIER = 3.5
+const POWER_MULTIPLIER = 3.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -22,6 +22,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var eyes := $Eyes
 @onready var container := $'..'
 @onready var fpsText := $'../../UI/FPSDisplay'
+@onready var graphics = $'../../WorldEnvironment'.environment
 
 
 func diamond(v: Vector2):
@@ -47,8 +48,9 @@ func clamp_cam() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	elif event.is_action_pressed("ui_cancel"):
+	elif event.is_action_released("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		Global.change_scene('res://Scenes/main_menu.tscn')
 	
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		if event is InputEventMouseMotion:
@@ -83,9 +85,13 @@ func _physics_process(delta: float) -> void:
 		Global.applicableTimeScale = .125
 		Global.stamina -= delta * 21
 		fov = 60
+		graphics.adjustment_contrast = 1.3
+		graphics.adjustment_saturation = 0.4
 	else:
 		Global.applicableTimeScale = 1
 		fov = 80
+		graphics.adjustment_contrast = 1.1
+		graphics.adjustment_saturation = 1.0
 	
 	delta *= Global.applicableTimeScale
 	
@@ -169,7 +175,7 @@ func _physics_process(delta: float) -> void:
 		velocity = f_to_v3(0)
 		Global.reset()
 	
-	Global.climbLastFrame = Input.is_action_pressed("jump") && !Global.staminaOut && !(is_on_floor()||is_on_ceiling_only()) && (wallClimb || Global.climbLastFrame)
+	Global.climbLastFrame = Input.is_action_pressed("jump") && is_on_wall() && !Global.staminaOut && !is_on_floor() && (wallClimb || Global.climbLastFrame)
 	
 	if wasd && is_on_floor():
 		Global.walkTime += delta
