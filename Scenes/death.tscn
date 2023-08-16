@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://cb1fnwwb20bs7"]
+
+[ext_resource type="Script" path="res://Scripts/LoadingBit.gd" id="1_crhsy"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Loading" type="ColorRect" parent="."]
+z_index = 4096
+layout_mode = 0
+offset_right = 100000.0
+offset_bottom = 1e+06
+tooltip_text = "Loading..."
+color = Color(0, 0, 0, 1)
+script = ExtResource("1_crhsy")

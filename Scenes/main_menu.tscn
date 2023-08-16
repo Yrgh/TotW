@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3 uid="uid://c8377vioqvvbs"]
+
+[ext_resource type="Script" path="res://Scripts/CloseGame.gd" id="1_hkpda"]
+[ext_resource type="Script" path="res://Scripts/PlayStranded.gd" id="2_18bkm"]
+[ext_resource type="Script" path="res://Scenes/SettingsButton.gd" id="3_6iqlo"]
+[ext_resource type="Script" path="res://Scripts/LoadingBit.gd" id="4_iqq18"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Close Game" type="Button" parent="."]
+layout_mode = 0
+offset_left = 50.0
+offset_right = 90.0
+offset_bottom = 40.0
+tooltip_text = "Close"
+text = "Close Game"
+script = ExtResource("1_hkpda")
+
+[node name="Play Stranded" type="Button" parent="."]
+layout_mode = 0
+offset_top = 50.0
+offset_right = 8.0
+offset_bottom = 58.0
+text = "Play Stranded"
+script = ExtResource("2_18bkm")
+
+[node name="Settings" type="Button" parent="."]
+layout_mode = 0
+offset_left = 75.0
+offset_top = 75.0
+offset_right = 83.0
+offset_bottom = 83.0
+text = "Settings"
+script = ExtResource("3_6iqlo")
+
+[node name="Loading" type="ColorRect" parent="."]
+z_index = 4096
+layout_mode = 0
+offset_right = 100000.0
+offset_bottom = 1e+06
+tooltip_text = "Loading..."
+color = Color(0, 0, 0, 1)
+script = ExtResource("4_iqq18")
