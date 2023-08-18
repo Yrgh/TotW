@@ -151,3 +151,9 @@ func set_toggleData(var_name,data):
 		"show_perf":
 			show_perf.button_pressed = str_to_var(data)
 
+
+func _process(_delta: float) -> void:
+	Global.update_vars()
+	if Global.currentSceneLocation == 'res://Scenes/settings_page.tscn':
+		var space = Vector2(Global.ScreenSize) - Vector2(50,20)
+		$'../../..'.position = -size/2 + space/2

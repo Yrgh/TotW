@@ -33,6 +33,7 @@ const FOV_R = 1.0
 var FOV = BetterAnimation.new(CD_F,CD_ZETA,CD_R,80)
 
 var currentScene = null
+var currentSceneLocation := ""
 
 func _ready() -> void:
 	var root = get_tree().root
@@ -42,6 +43,7 @@ func change_scene(path) -> void:
 	call_deferred("_deferred_goto_scene", path)
 
 func _deferred_goto_scene(path) -> void:
+	currentSceneLocation = path
 	currentScene.free()
 	var s = ResourceLoader.load(path)
 	currentScene = s.instantiate()
