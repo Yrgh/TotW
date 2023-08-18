@@ -3,6 +3,10 @@ extends Node
 var stamina = 100.0
 var staminaOut = false
 
+var perf_shown = false
+
+var player_position := Vector3()
+
 const CD_F = 1.5
 const CD_ZETA = 0.8
 const CD_R = 1.5

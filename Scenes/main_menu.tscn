@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/CloseGame.gd" id="1_hkpda"]
 [ext_resource type="Script" path="res://Scripts/PlayStranded.gd" id="2_18bkm"]
-[ext_resource type="Script" path="res://Scenes/SettingsButton.gd" id="3_6iqlo"]
+[ext_resource type="Script" path="res://Scripts/SettingsButton.gd" id="3_f4gre"]
 [ext_resource type="Script" path="res://Scripts/LoadingBit.gd" id="4_iqq18"]
 
 [node name="Main" type="Control"]
@@ -33,7 +33,7 @@ offset_top = 75.0
 offset_right = 83.0
 offset_bottom = 83.0
 text = "Settings"
-script = ExtResource("3_6iqlo")
+script = ExtResource("3_f4gre")
 
 [node name="Loading" type="ColorRect" parent="."]
 z_index = 4096

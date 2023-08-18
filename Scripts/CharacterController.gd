@@ -23,7 +23,9 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var container := $'..'
 @onready var fpsText := $'../../UI/FPSDisplay'
 @onready var graphics = $'../../WorldEnvironment'.environment
+@onready var tool := $'../../Spear'
 
+var toolHeld := true
 
 func diamond(v: Vector2):
 	if v.x != 0 && v.y != 0:
@@ -70,6 +72,11 @@ var physicsFPS
 func _physics_process(delta: float) -> void:
 	clamp_cam()
 	fix_alignment()
+	
+	tool.get_node('CollisionShape3D').disabled = toolHeld
+	if toolHeld:
+		tool.position = position + Vector3(0.654,1.423,-1.74) * transform.basis.inverse()
+		tool.rotation = rotation + Vector3(deg_to_rad(-18.3),deg_to_rad(180),0)
 	
 	var fov
 	
@@ -190,7 +197,15 @@ func _physics_process(delta: float) -> void:
 	
 	$'Eyes/Camera SpringArm/Camera'.fov = Global.FOV.upd(delta,fov)
 	
+	if Input.is_action_just_pressed("item"):
+		tool.linear_velocity = velocity
+		toolHeld = !toolHeld
+	
 	move_and_slide()
+	
+	Global.player_position = global_position
 
 func _process(delta: float) -> void:
-	fpsText.text = "FPS(Graphics): " + str(1/delta) +"\nFPS(Physics): " + str(physicsFPS)
+	fpsText.visible = Global.perf_shown
+	if Global.perf_shown:
+		fpsText.text = "FPS(Graphics): " + str(1/delta) +"\nFPS(Physics): " + str(physicsFPS)
