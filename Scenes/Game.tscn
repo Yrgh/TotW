@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://dn8rg714s85jw"]
+[gd_scene load_steps=35 format=3 uid="uid://dn8rg714s85jw"]
 
 [ext_resource type="Script" path="res://Scripts/Stamina.gd" id="1_kgha5"]
 [ext_resource type="Material" uid="uid://rftwgpepbmyl" path="res://Materials/LeafGrass.tres" id="2_ad7nw"]
@@ -17,7 +17,6 @@
 [ext_resource type="Script" path="res://Scripts/ControlUpdrAssigner.gd" id="15_c2tpp"]
 [ext_resource type="Script" path="res://Scripts/ChangeCtrl.gd" id="16_6piq7"]
 [ext_resource type="Script" path="res://Scripts/ShowPerf.gd" id="17_feetx"]
-[ext_resource type="Script" path="res://Scripts/ResetCtrls.gd" id="18_ad2a5"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xc8ji"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -90,16 +89,6 @@ points = PackedVector3Array(-0.125207, -0.532801, -0.480507, 0.0227831, 0.47607,
 
 [sub_resource type="BoxMesh" id="BoxMesh_4d672"]
 size = Vector3(0.25, 0.5, 0.25)
-
-[sub_resource type="GDScript" id="GDScript_d3wgy"]
-script/source = "extends Button
-
-@onready var container := $'..'
-
-func _pressed() -> void:
-	container.save(\"Controls\")
-	Global.change_scene('res://Scenes/main_menu.tscn')
-"
 
 [node name="MainScene" type="Node3D"]
 
@@ -319,10 +308,6 @@ top_level = true
 
 [node name="GridContainer" type="GridContainer" parent="."]
 visible = false
-offset_left = 50.0
-offset_top = 20.0
-offset_right = 280.0
-offset_bottom = 416.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/h_separation = 12
@@ -330,106 +315,51 @@ theme_override_constants/v_separation = 6
 columns = 2
 script = ExtResource("15_c2tpp")
 
-[node name="Jump" type="Label" parent="GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Jump"
-
 [node name="JumpKey" type="Button" parent="GridContainer" groups=["ControlSetting"]]
 layout_mode = 2
 text = "[SPACE]"
 script = ExtResource("16_6piq7")
-
-[node name="Forward" type="Label" parent="GridContainer"]
-layout_mode = 2
-text = "Walk Forward"
 
 [node name="ForwardKey" type="Button" parent="GridContainer" groups=["ControlSetting"]]
 layout_mode = 2
 text = "[W]"
 script = ExtResource("16_6piq7")
 
-[node name="Back" type="Label" parent="GridContainer"]
-layout_mode = 2
-text = "Walk Backwards"
-
 [node name="BackKey" type="Button" parent="GridContainer" groups=["ControlSetting"]]
 layout_mode = 2
 text = "[S]"
 script = ExtResource("16_6piq7")
-
-[node name="Left" type="Label" parent="GridContainer"]
-layout_mode = 2
-text = "Strafe Left"
 
 [node name="LeftKey" type="Button" parent="GridContainer" groups=["ControlSetting"]]
 layout_mode = 2
 text = "[A]"
 script = ExtResource("16_6piq7")
 
-[node name="Right" type="Label" parent="GridContainer"]
-layout_mode = 2
-text = "Strafe Right"
-
 [node name="RightKey" type="Button" parent="GridContainer" groups=["ControlSetting"]]
 layout_mode = 2
 text = "[D]"
 script = ExtResource("16_6piq7")
-
-[node name="FocusHold" type="Label" parent="GridContainer"]
-layout_mode = 2
-text = "Concentrate (Hold)"
 
 [node name="FocusHoldKey" type="Button" parent="GridContainer" groups=["ControlSetting"]]
 layout_mode = 2
 text = "[C]"
 script = ExtResource("16_6piq7")
 
-[node name="FocusToggle" type="Label" parent="GridContainer"]
-layout_mode = 2
-text = "Concntrate (Toggle)"
-
 [node name="FocusToggleKey" type="Button" parent="GridContainer" groups=["ControlSetting"]]
 layout_mode = 2
 text = "[V]"
 script = ExtResource("16_6piq7")
-
-[node name="Sprint" type="Label" parent="GridContainer"]
-layout_mode = 2
-text = "Sprint"
 
 [node name="SprintKey" type="Button" parent="GridContainer" groups=["ControlSetting"]]
 layout_mode = 2
 text = "[SHIFT]"
 script = ExtResource("16_6piq7")
 
-[node name="Item" type="Label" parent="GridContainer"]
-layout_mode = 2
-text = "Drop / Pick Up"
-
 [node name="ItemKey" type="Button" parent="GridContainer" groups=["ControlSetting"]]
 layout_mode = 2
 text = "[Q]"
 script = ExtResource("16_6piq7")
 
-[node name="ShowPerfToggle" type="Label" parent="GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Show Performance
-"
-
 [node name="ShowPerfButton" type="CheckButton" parent="GridContainer"]
 layout_mode = 2
 script = ExtResource("17_feetx")
-
-[node name="Reset" type="Button" parent="GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Reset to Defaults"
-script = ExtResource("18_ad2a5")
-
-[node name="Esc" type="Button" parent="GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Exit"
-script = SubResource("GDScript_d3wgy")

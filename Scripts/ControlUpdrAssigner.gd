@@ -25,20 +25,21 @@ func reset() -> void:
 	item.eventAction = "item"
 	sprint.eventAction = "sprint"
 	
-	jump.keyName = "SPACE"
-	forward.keyName = "W"
-	back.keyName = "S"
-	left.keyName = "A"
-	right.keyName = "D"
-	focus_hold.keyName = "C"
-	focus_toggle.keyName = "V"
-	item.keyName = "Q"
-	sprint.keyName = "SHIFT"
+	jump.keyName = KEY_SPACE
+	forward.keyName = KEY_W
+	back.keyName = KEY_S
+	left.keyName = KEY_A
+	right.keyName = KEY_D
+	focus_hold.keyName = KEY_C
+	focus_toggle.keyName = KEY_V
+	item.keyName = KEY_Q
+	sprint.keyName = KEY_SHIFT
 	
 	show_perf.button_pressed = false
 
 func _ready() -> void:
 	load_data("Controls")
+	upd()
 	
 func save(dest:String):
 	var save_file := FileAccess.open("user://"+dest+".dat",FileAccess.WRITE)
@@ -63,7 +64,7 @@ func save(dest:String):
 func save_keybind(save_file,typename:String,node):
 	save_file.store_line("#"+typename+"#")
 	save_file.store_line(node.eventAction)
-	save_file.store_line(node.keyName)
+	save_file.store_line(str(node.keyName))
 
 func save_data(save_file,typename:String,val):
 	save_file.store_line("$"+typename+"$")
@@ -128,31 +129,33 @@ func set_keyName(var_name,data):
 	
 	match var_name:
 		"jump":
-			jump.keyName = data
+			jump.loaded(data)
 		"forward":
-			forward.keyName = data
+			forward.loaded(data)
 		"back":
-			back.keyName = data
+			back.loaded(data)
 		"left":
-			left.keyName = data
+			left.loaded(data)
 		"right":
-			right.keyName = data
+			right.loaded(data)
 		"focus(hold)":
-			focus_hold.keyName = data
+			focus_hold.loaded(data)
 		"focus(toggle)":
-			focus_toggle.keyName = data
+			focus_toggle.loaded(data)
 		"sprint":
-			sprint.keyName = data
+			sprint.loaded(data)
 		"item":
-			item.keyName = data
+			item.loaded(data)
 
 func set_toggleData(var_name,data):
 	match var_name:
 		"show_perf":
 			show_perf.button_pressed = str_to_var(data)
 
-
 func _process(_delta: float) -> void:
+	upd()
+
+func upd() -> void:
 	Global.update_vars()
 	if Global.currentSceneLocation == 'res://Scenes/settings_page.tscn':
 		var space = Vector2(Global.ScreenSize) - Vector2(50,20)
