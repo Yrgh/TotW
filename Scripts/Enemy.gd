@@ -38,6 +38,6 @@ func _physics_process(delta: float) -> void:
 		searchingTime = 0
 	else:
 		searchingTime += delta
-		rotation.y = sin(searchingTime) * PI/2
+		rotation.y = sin(searchingTime) * PI/4
 
 	move_and_slide()

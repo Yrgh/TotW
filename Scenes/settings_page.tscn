@@ -1,11 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://xlnmh4ct0m4d"]
+[gd_scene load_steps=10 format=3 uid="uid://xlnmh4ct0m4d"]
 
 [ext_resource type="Script" path="res://Scripts/LoadingBit.gd" id="1_ffets"]
 [ext_resource type="Script" path="res://Scripts/ControlUpdrAssigner.gd" id="2_bbndj"]
 [ext_resource type="Script" path="res://Scripts/ChangeCtrl.gd" id="3_xhwlc"]
 [ext_resource type="Script" path="res://Scripts/ShowPerf.gd" id="4_ca1af"]
 [ext_resource type="Script" path="res://Scripts/ResetCtrls.gd" id="4_p2w4d"]
+[ext_resource type="Script" path="res://Scripts/DebugWindowToggle.gd" id="5_u27kt"]
 [ext_resource type="Script" path="res://Scripts/UndoSettings.gd" id="6_dj81i"]
+[ext_resource type="Script" path="res://Scripts/SaveSettings.gd" id="8_vmgkk"]
 
 [sub_resource type="GDScript" id="GDScript_d3wgy"]
 script/source = "extends Button
@@ -13,7 +15,7 @@ script/source = "extends Button
 @onready var container := $'..'
 
 func _pressed() -> void:
-	container.save(\"Controls\")
+	container.save()
 	Global.change_scene('res://Scenes/main_menu.tscn')
 "
 
@@ -79,6 +81,16 @@ theme_override_constants/h_separation = 12
 theme_override_constants/v_separation = 6
 columns = 2
 script = ExtResource("2_bbndj")
+
+[node name="DestinationLabel" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Profile: "
+
+[node name="Destination" type="LineEdit" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Controls"
+placeholder_text = "Enter Here"
+expand_to_text_length = true
 
 [node name="Jump" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
 layout_mode = 2
@@ -172,6 +184,16 @@ text = "Show Performance
 layout_mode = 2
 script = ExtResource("4_ca1af")
 
+[node name="SmallWindow" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Debug Window
+"
+
+[node name="DebugWindowToggle" type="CheckButton" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+script = ExtResource("5_u27kt")
+
 [node name="Reset" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -188,3 +210,8 @@ script = SubResource("GDScript_d3wgy")
 layout_mode = 2
 text = "Revert Changes"
 script = ExtResource("6_dj81i")
+
+[node name="Save" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Save Changes"
+script = ExtResource("8_vmgkk")

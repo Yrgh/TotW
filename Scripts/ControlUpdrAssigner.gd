@@ -12,9 +12,43 @@ extends GridContainer
 @onready var sprint := $SprintKey
 
 @onready var show_perf := $ShowPerfButton
+@onready var debug_window := $DebugWindowToggle
 
+@onready var destination_text := $Destination
 
 func reset() -> void:
+	jump.code = KEY_SPACE
+	forward.code = KEY_W
+	back.code = KEY_S
+	left.code = KEY_A
+	right.code = KEY_D
+	focus_hold.code = KEY_C
+	focus_toggle.code = KEY_V
+	item.code = KEY_Q
+	sprint.code = KEY_SHIFT
+	
+	jump.isMouse = false
+	forward.isMouse = false
+	back.isMouse = false
+	left.isMouse = false
+	right.isMouse = false
+	item.isMouse = false
+	focus_hold.isMouse = false
+	focus_toggle.isMouse = false
+	sprint.isMouse = false
+	
+	show_perf.button_pressed = false
+	debug_window.button_pressed = false
+
+var destination := "Controls"
+func _ready() -> void:
+	if FileAccess.file_exists("user://LAST_CONTROLS_DESTINATION.txt"):
+		destination = FileAccess.open("user://LAST_CONTROLS_DESTINATION.txt",FileAccess.READ).get_line()
+	
+	destination_text.text = destination
+	
+	load_data()
+	
 	jump.eventAction = "jump"
 	forward.eventAction = "forward"
 	back.eventAction = "backward"
@@ -25,24 +59,13 @@ func reset() -> void:
 	item.eventAction = "item"
 	sprint.eventAction = "sprint"
 	
-	jump.keyName = KEY_SPACE
-	forward.keyName = KEY_W
-	back.keyName = KEY_S
-	left.keyName = KEY_A
-	right.keyName = KEY_D
-	focus_hold.keyName = KEY_C
-	focus_toggle.keyName = KEY_V
-	item.keyName = KEY_Q
-	sprint.keyName = KEY_SHIFT
-	
-	show_perf.button_pressed = false
-
-func _ready() -> void:
-	load_data("Controls")
 	upd()
 	
-func save(dest:String):
-	var save_file := FileAccess.open("user://"+dest+".dat",FileAccess.WRITE)
+func save():
+	destination = destination_text.text
+	FileAccess.open("user://LAST_CONTROLS_DESTINATION.txt",FileAccess.WRITE).store_line(destination)
+	
+	var save_file := FileAccess.open("user://"+destination+".dat",FileAccess.WRITE)
 	
 	#Format: #Name
 	#        eventAction
@@ -59,24 +82,28 @@ func save(dest:String):
 	save_keybind(save_file,"sprint",sprint)
 	
 	save_data(save_file,"show_perf",show_perf.button_pressed)
+	save_data(save_file,"debug_window",debug_window.button_pressed)
 	
 
 func save_keybind(save_file,typename:String,node):
 	save_file.store_line("#"+typename+"#")
-	save_file.store_line(node.eventAction)
-	save_file.store_line(str(node.keyName))
+	save_file.store_line(str(node.isMouse)) 
+	save_file.store_line(str(node.code))
 
 func save_data(save_file,typename:String,val):
 	save_file.store_line("$"+typename+"$")
 	save_file.store_line(str(val))
 
-func load_data(loc:String):
-	if !FileAccess.file_exists("user://"+loc+".dat"):
+func load_data():
+	destination = destination_text.text
+	FileAccess.open("user://LAST_CONTROLS_DESTINATION.txt",FileAccess.WRITE).store_line(destination)
+	
+	if !FileAccess.file_exists("user://"+destination+".dat"):
 		reset()
 		return
 	
 	
-	var file = FileAccess.open("user://"+loc+".dat",FileAccess.READ)
+	var file = FileAccess.open("user://"+destination+".dat",FileAccess.READ)
 	var lineType = ""
 	var current_var_name
 	while file.get_position() < file.get_length():
@@ -84,73 +111,82 @@ func load_data(loc:String):
 		
 		if line.begins_with("#") && line.ends_with("#"):
 			current_var_name = line.get_slice("#",1)
-			lineType = "eventAction"
+			lineType = "isMouse"
 		elif line.begins_with("$") && line.ends_with("$"):
 			current_var_name = line.get_slice("$",1)
 			lineType = "toggleData"
 		else:
-			if lineType == "eventAction":
+			if lineType == "isMouse":
 				lineType = "keyName"
-				set_eventAction(current_var_name,line)
+				set_isMouse(current_var_name,line)
 			elif lineType == "keyName":
 				set_keyName(current_var_name,line)
 			elif lineType == "toggleData":
 				set_toggleData(current_var_name,line)
 
-func set_eventAction(var_name,data):
-	if data == "":
-		reset()
-		return
-	
-	match var_name:
-		"jump":
-			jump.eventAction = data
-		"forward":
-			forward.eventAction = data
-		"back":
-			back.eventAction = data
-		"left":
-			left.eventAction = data
-		"right":
-			right.eventAction = data
-		"focus(hold)":
-			focus_hold.eventAction = data
-		"focus(toggle)":
-			focus_toggle.eventAction = data
-		"item":
-			item.eventAction = data
-		"sprint":
-			sprint.eventAction = data
+func set_isMouse(var_name,data):
+	if str_to_var(data) != null:
+		if data == "":
+			reset()
+			return
+		
+		match var_name:
+			"jump":
+				jump.isMouse = str_to_var(data)
+			"forward":
+				forward.isMouse = str_to_var(data)
+			"back":
+				back.isMouse = str_to_var(data)
+			"left":
+				left.isMouse = str_to_var(data)
+			"right":
+				right.isMouse = str_to_var(data)
+			"focus(hold)":
+				focus_hold.isMouse = str_to_var(data)
+			"focus(toggle)":
+				focus_toggle.isMouse = str_to_var(data)
+			"item":
+				item.isMouse = str_to_var(data)
+			"sprint":
+				sprint.isMouse = str_to_var(data)
+	else:
+		print("ERROR loading isMouse")
 
 func set_keyName(var_name,data):
-	if data == "":
-		reset()
-		return
+	if str_to_var(data):
+		if data == "":
+			reset()
+			print("reset oh no")
+			return
 	
-	match var_name:
-		"jump":
-			jump.loaded(data)
-		"forward":
-			forward.loaded(data)
-		"back":
-			back.loaded(data)
-		"left":
-			left.loaded(data)
-		"right":
-			right.loaded(data)
-		"focus(hold)":
-			focus_hold.loaded(data)
-		"focus(toggle)":
-			focus_toggle.loaded(data)
-		"sprint":
-			sprint.loaded(data)
-		"item":
-			item.loaded(data)
+		match var_name:
+			"jump":
+				jump.loaded(data)
+			"forward":
+				forward.loaded(data)
+			"back":
+				back.loaded(data)
+			"left":
+				left.loaded(data)
+			"right":
+					right.loaded(data)
+			"focus(hold)":
+				focus_hold.loaded(data)
+			"focus(toggle)":
+				focus_toggle.loaded(data)
+			"sprint":
+				sprint.loaded(data)
+			"item":
+				item.loaded(data)
+	else:
+		print("ERROR loading code")
 
 func set_toggleData(var_name,data):
 	match var_name:
 		"show_perf":
 			show_perf.button_pressed = str_to_var(data)
+		"debug_window":
+			debug_window.button_pressed = str_to_var(data)
 
 func _process(_delta: float) -> void:
 	upd()

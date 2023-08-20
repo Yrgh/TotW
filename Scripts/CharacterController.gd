@@ -27,6 +27,20 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 var toolHeld := true
 
+func fix_tool() -> void:
+	if toolHeld:
+		tool.position = position + Vector3(0.654,1.423,-1.74) * transform.basis.inverse()
+		tool.rotation = rotation + Vector3(deg_to_rad(-18.3),deg_to_rad(180),0)
+	
+	tool.get_node('CollisionShape3D').disabled = toolHeld
+	
+	if Input.is_action_just_pressed("item") && !toolHeld && M.pythag3d(tool.global_position-global_position)<4.0:
+		toolHeld = true
+	elif Input.is_action_just_pressed("item") && toolHeld:
+		tool.linear_velocity = velocity
+		toolHeld = false
+	
+
 func diamond(v: Vector2):
 	if v.x != 0 && v.y != 0:
 		return .5*v
@@ -44,22 +58,29 @@ func clamp_cam() -> void:
 	if head.spring_length <= .11:
 		head.rotation.x = clamp(head.rotation.x,deg_to_rad(-60),deg_to_rad(90))
 	else:
-		head.rotation.x = clamp(head.rotation.x,deg_to_rad(-75),deg_to_rad(10))
+		head.rotation.x = clamp(head.rotation.x,deg_to_rad(-75),deg_to_rad(30))
 	
+var inputs = []
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	elif event.is_action_released("ui_cancel"):
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		Global.change_scene('res://Scenes/main_menu.tscn')
+	inputs.append(event)
+
+func unwanted() -> void:
+	for event in inputs:
+		if event is InputEventMouseButton:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		elif event.is_action_released("ui_cancel"):
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			Global.change_scene('res://Scenes/main_menu.tscn')
+		elif Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+			if event is InputEventMouseMotion:
+				eyes.rotate_y(-event.relative.x*.004)
+				head.rotate_x(-event.relative.y*.004)
+				clamp_cam()
+				fix_alignment()
+				fix_tool()
 	
-	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		if event is InputEventMouseMotion:
-			eyes.rotate_y(-event.relative.x*.004)
-			head.rotate_x(-event.relative.y*.004)
-			clamp_cam()
-			fix_alignment()
+	inputs = []
 
 func f_to_v3(f: float) -> Vector3:
 	return Vector3(f,f,f)
@@ -69,14 +90,9 @@ func get_horiz_speed(v: Vector3) -> float:
 
 const walkMult = PI*POWER_MULTIPLIER
 var physicsFPS
-func _physics_process(delta: float) -> void:
+func _process(delta: float) -> void:
 	clamp_cam()
 	fix_alignment()
-	
-	tool.get_node('CollisionShape3D').disabled = toolHeld
-	if toolHeld:
-		tool.position = position + Vector3(0.654,1.423,-1.74) * transform.basis.inverse()
-		tool.rotation = rotation + Vector3(deg_to_rad(-18.3),deg_to_rad(180),0)
 	
 	var fov
 	
@@ -197,15 +213,16 @@ func _physics_process(delta: float) -> void:
 	
 	$'Eyes/Camera SpringArm/Camera'.fov = Global.FOV.upd(delta,fov)
 	
-	if Input.is_action_just_pressed("item"):
-		tool.linear_velocity = velocity
-		toolHeld = !toolHeld
+	fix_tool()
 	
 	move_and_slide()
 	
 	Global.player_position = global_position
+	process(delta)
+	
+	unwanted()
 
-func _process(delta: float) -> void:
+func process(delta: float) -> void:
 	fpsText.visible = Global.perf_shown
 	if Global.perf_shown:
-		fpsText.text = "FPS(Graphics): " + str(1/delta) +"\nFPS(Physics): " + str(physicsFPS)
+		fpsText.text = "FPS: " + str(1/delta)

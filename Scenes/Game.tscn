@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://dn8rg714s85jw"]
+[gd_scene load_steps=36 format=3 uid="uid://dn8rg714s85jw"]
 
 [ext_resource type="Script" path="res://Scripts/Stamina.gd" id="1_kgha5"]
 [ext_resource type="Material" uid="uid://rftwgpepbmyl" path="res://Materials/LeafGrass.tres" id="2_ad7nw"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" path="res://Scripts/ControlUpdrAssigner.gd" id="15_c2tpp"]
 [ext_resource type="Script" path="res://Scripts/ChangeCtrl.gd" id="16_6piq7"]
 [ext_resource type="Script" path="res://Scripts/ShowPerf.gd" id="17_feetx"]
+[ext_resource type="Script" path="res://Scripts/DebugWindowToggle.gd" id="18_0kmde"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xc8ji"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -315,6 +316,11 @@ theme_override_constants/v_separation = 6
 columns = 2
 script = ExtResource("15_c2tpp")
 
+[node name="Destination" type="LineEdit" parent="GridContainer"]
+layout_mode = 2
+text = "Controls"
+placeholder_text = "Enter Here"
+
 [node name="JumpKey" type="Button" parent="GridContainer" groups=["ControlSetting"]]
 layout_mode = 2
 text = "[SPACE]"
@@ -363,3 +369,7 @@ script = ExtResource("16_6piq7")
 [node name="ShowPerfButton" type="CheckButton" parent="GridContainer"]
 layout_mode = 2
 script = ExtResource("17_feetx")
+
+[node name="DebugWindowToggle" type="CheckButton" parent="GridContainer"]
+layout_mode = 2
+script = ExtResource("18_0kmde")
