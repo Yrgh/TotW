@@ -22,7 +22,7 @@ M="*res://Scripts/Math.gd"
 
 [display]
 
-window/vsync/vsync_mode=2
+window/vsync/vsync_mode=3
 
 [input]
 
