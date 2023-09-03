@@ -36,6 +36,7 @@ text = "Settings"
 script = ExtResource("3_f4gre")
 
 [node name="Loading" type="ColorRect" parent="."]
+visible = false
 z_index = 4096
 layout_mode = 0
 offset_right = 100000.0

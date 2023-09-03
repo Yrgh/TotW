@@ -1,4 +1,4 @@
 extends CheckButton
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	Global.perf_shown = button_pressed

@@ -1,5 +1,6 @@
 extends GridContainer
 
+@onready var parent := $'..'
 
 @onready var jump := $JumpKey
 @onready var forward := $ForwardKey
@@ -10,11 +11,28 @@ extends GridContainer
 @onready var focus_toggle := $FocusToggleKey
 @onready var item := $ItemKey
 @onready var sprint := $SprintKey
+@onready var zoom_in := $ZoomInKey
+@onready var zoom_out := $ZoomOutKey
+@onready var inven := $InvenKey
 
 @onready var show_perf := $ShowPerfButton
 @onready var debug_window := $DebugWindowToggle
 
 @onready var destination_text := $Destination
+
+func set_eventActions() -> void:
+	jump.eventAction = "jump"
+	forward.eventAction = "forward"
+	back.eventAction = "backward"
+	left.eventAction = "left"
+	right.eventAction = "right"
+	focus_hold.eventAction = "focus(hold)"
+	focus_toggle.eventAction = "focus(toggle)"
+	item.eventAction = "item"
+	sprint.eventAction = "sprint"
+	zoom_in.eventAction = "zoom_in"
+	zoom_out.eventAction = "zoom_out"
+	inven.eventAction = "inven"
 
 func reset() -> void:
 	jump.code = KEY_SPACE
@@ -26,6 +44,9 @@ func reset() -> void:
 	focus_toggle.code = KEY_V
 	item.code = KEY_Q
 	sprint.code = KEY_SHIFT
+	zoom_in.code = 4
+	zoom_out.code = 5
+	inven.code = KEY_E
 	
 	jump.isMouse = false
 	forward.isMouse = false
@@ -36,6 +57,9 @@ func reset() -> void:
 	focus_hold.isMouse = false
 	focus_toggle.isMouse = false
 	sprint.isMouse = false
+	zoom_in.isMouse = true
+	zoom_out.isMouse = true
+	inven.isMouse = false
 	
 	show_perf.button_pressed = false
 	debug_window.button_pressed = false
@@ -49,19 +73,10 @@ func _ready() -> void:
 	
 	load_data()
 	
-	jump.eventAction = "jump"
-	forward.eventAction = "forward"
-	back.eventAction = "backward"
-	left.eventAction = "left"
-	right.eventAction = "right"
-	focus_hold.eventAction = "focus(hold)"
-	focus_toggle.eventAction = "focus(toggle)"
-	item.eventAction = "item"
-	sprint.eventAction = "sprint"
-	
-	upd()
+	set_eventActions()
 	
 func save():
+	set_eventActions()
 	destination = destination_text.text
 	FileAccess.open("user://LAST_CONTROLS_DESTINATION.txt",FileAccess.WRITE).store_line(destination)
 	
@@ -80,6 +95,9 @@ func save():
 	save_keybind(save_file,"focus(toggle)",focus_toggle)
 	save_keybind(save_file,"item",item)
 	save_keybind(save_file,"sprint",sprint)
+	save_keybind(save_file,"zoom_in",zoom_in)
+	save_keybind(save_file,"zoom_out",zoom_out)
+	save_keybind(save_file,"inven",inven)
 	
 	save_data(save_file,"show_perf",show_perf.button_pressed)
 	save_data(save_file,"debug_window",debug_window.button_pressed)
@@ -95,6 +113,7 @@ func save_data(save_file,typename:String,val):
 	save_file.store_line(str(val))
 
 func load_data():
+	set_eventActions()
 	destination = destination_text.text
 	FileAccess.open("user://LAST_CONTROLS_DESTINATION.txt",FileAccess.WRITE).store_line(destination)
 	
@@ -149,6 +168,12 @@ func set_isMouse(var_name,data):
 				item.isMouse = str_to_var(data)
 			"sprint":
 				sprint.isMouse = str_to_var(data)
+			"zoom_in":
+				zoom_in.isMouse = str_to_var(data)
+			"zoom_out":
+				zoom_out.isMouse = str_to_var(data)
+			"inven":
+				inven.isMouse = str_to_var(data)
 	else:
 		print("ERROR loading isMouse")
 
@@ -178,6 +203,12 @@ func set_keyName(var_name,data):
 				sprint.loaded(data)
 			"item":
 				item.loaded(data)
+			"zoom_in":
+				zoom_in.loaded(data)
+			"zoom_out":
+				zoom_out.loaded(data)
+			"inven":
+				inven.loaded(data)
 	else:
 		print("ERROR loading code")
 
@@ -187,12 +218,4 @@ func set_toggleData(var_name,data):
 			show_perf.button_pressed = str_to_var(data)
 		"debug_window":
 			debug_window.button_pressed = str_to_var(data)
-
-func _process(_delta: float) -> void:
-	upd()
-
-func upd() -> void:
-	Global.update_vars()
-	if Global.currentSceneLocation == 'res://Scenes/settings_page.tscn':
-		var space = Vector2(Global.ScreenSize) - Vector2(50,20)
-		$'../../..'.position = -size/2 + space/2
+	

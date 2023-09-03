@@ -1,0 +1,10 @@
+[gd_resource type="NoiseTexture2D" load_steps=2 format=3 uid="uid://bdd0fkxbqbhvq"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xcheq"]
+seed = 69
+
+[resource]
+width = 200
+height = 200
+seamless = true
+noise = SubResource("FastNoiseLite_xcheq")

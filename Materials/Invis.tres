@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dbumy5ayf0css"]
+
+[resource]
+resource_local_to_scene = true
+transparency = 2
+alpha_scissor_threshold = 1.0
+alpha_antialiasing_mode = 0
+refraction_scale = -1.0
+grow_amount = -16.0
+proximity_fade_enabled = true
+proximity_fade_distance = 4096.0

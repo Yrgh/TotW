@@ -1,0 +1,216 @@
+[gd_scene load_steps=9 format=3 uid="uid://dcofvewgu8v5c"]
+
+[ext_resource type="Script" path="res://Scripts/ControlUpdrAssigner.gd" id="1_cgn5c"]
+[ext_resource type="Script" path="res://Scripts/ChangeCtrl.gd" id="2_260ky"]
+[ext_resource type="Script" path="res://Scripts/ShowPerf.gd" id="3_mhawo"]
+[ext_resource type="Script" path="res://Scripts/DebugWindowToggle.gd" id="4_tdbax"]
+[ext_resource type="Script" path="res://Scripts/ResetCtrls.gd" id="5_p4cxv"]
+[ext_resource type="Script" path="res://Scripts/UndoSettings.gd" id="6_m6t36"]
+[ext_resource type="Script" path="res://Scripts/SaveSettings.gd" id="7_lnhlv"]
+
+[sub_resource type="GDScript" id="GDScript_673fe"]
+script/source = "extends Button
+
+@onready var container := $'..'
+
+func _pressed() -> void:
+	container.destination = container.destination_text.text
+	FileAccess.open(\"user://LAST_CONTROLS_DESTINATION.txt\",FileAccess.WRITE).store_line(container.destination)
+	Global.change_scene('res://Scenes/main_menu.tscn')
+"
+
+[node name="MarginContainer" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+clip_contents = false
+layout_mode = 2
+follow_focus = true
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 10
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 6
+columns = 2
+script = ExtResource("1_cgn5c")
+
+[node name="DestinationLabel" type="Label" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Profile: "
+
+[node name="Destination" type="LineEdit" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Controls"
+placeholder_text = "Enter Here"
+expand_to_text_length = true
+
+[node name="Jump" type="Label" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Jump / Climb"
+
+[node name="JumpKey" type="Button" parent="ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
+process_priority = 1
+layout_mode = 2
+text = "[SPACE]"
+script = ExtResource("2_260ky")
+
+[node name="Forward" type="Label" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Walk Forward"
+
+[node name="ForwardKey" type="Button" parent="ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
+process_priority = 1
+layout_mode = 2
+text = "[W]"
+script = ExtResource("2_260ky")
+
+[node name="Back" type="Label" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Walk Backwards"
+
+[node name="BackKey" type="Button" parent="ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
+process_priority = 1
+layout_mode = 2
+text = "[S]"
+script = ExtResource("2_260ky")
+
+[node name="Left" type="Label" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Strafe Left"
+
+[node name="LeftKey" type="Button" parent="ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
+process_priority = 1
+layout_mode = 2
+text = "[A]"
+script = ExtResource("2_260ky")
+
+[node name="Right" type="Label" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Strafe Right"
+
+[node name="RightKey" type="Button" parent="ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
+process_priority = 1
+layout_mode = 2
+text = "[D]"
+script = ExtResource("2_260ky")
+
+[node name="FocusHold" type="Label" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Concentrate (Hold)"
+
+[node name="FocusHoldKey" type="Button" parent="ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
+process_priority = 1
+layout_mode = 2
+text = "[C]"
+script = ExtResource("2_260ky")
+
+[node name="FocusToggle" type="Label" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Concntrate (Toggle)"
+
+[node name="FocusToggleKey" type="Button" parent="ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
+process_priority = 1
+layout_mode = 2
+text = "[V]"
+script = ExtResource("2_260ky")
+
+[node name="Sprint" type="Label" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Sprint"
+
+[node name="SprintKey" type="Button" parent="ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
+process_priority = 1
+layout_mode = 2
+text = "[SHIFT]"
+script = ExtResource("2_260ky")
+
+[node name="Item" type="Label" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Drop / Pick Up"
+
+[node name="ItemKey" type="Button" parent="ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
+process_priority = 1
+layout_mode = 2
+text = "[Q]"
+script = ExtResource("2_260ky")
+
+[node name="ZoomIn" type="Label" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Zoom In"
+
+[node name="ZoomInKey" type="Button" parent="ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
+process_priority = 1
+layout_mode = 2
+text = "[Q]"
+script = ExtResource("2_260ky")
+
+[node name="ZoomOut" type="Label" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Zoom Out"
+
+[node name="ZoomOutKey" type="Button" parent="ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
+process_priority = 1
+layout_mode = 2
+text = "[Q]"
+script = ExtResource("2_260ky")
+
+[node name="ShowPerfToggle" type="Label" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Show Performance
+"
+
+[node name="ShowPerfButton" type="CheckButton" parent="ScrollContainer/MarginContainer/GridContainer"]
+process_priority = 1
+layout_mode = 2
+script = ExtResource("3_mhawo")
+
+[node name="SmallWindow" type="Label" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Debug Window
+"
+
+[node name="DebugWindowToggle" type="CheckButton" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+script = ExtResource("4_tdbax")
+
+[node name="Reset" type="Button" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Reset to Defaults"
+script = ExtResource("5_p4cxv")
+
+[node name="Esc" type="Button" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Exit"
+script = SubResource("GDScript_673fe")
+
+[node name="Undo" type="Button" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Revert Changes & Load Profile"
+script = ExtResource("6_m6t36")
+
+[node name="Save" type="Button" parent="ScrollContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Save Changes"
+script = ExtResource("7_lnhlv")

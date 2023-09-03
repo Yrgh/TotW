@@ -7,14 +7,19 @@ var isMouse : bool
 
 var open := false
 
+var mouse_over := false
+
 const MOUSE_NAMES = ["???","MOUSE1","MOUSE2","MOUSE3","SCROLLWHEEL UP","SCROLLWHEEL DOWN","???","???","???","???"]
+
+func _ready() -> void:
+	open = false
+	button_pressed = false
+
+
 
 func _process(_delta: float) -> void:
 	if button_pressed:
 		open = true
-	
-	for node in get_tree().get_nodes_in_group("ControlSetting"):
-		node.disabled = open
 	
 	if open:
 		text = "<Press Key>"
@@ -45,6 +50,7 @@ func _input(event: InputEvent) -> void:
 func loaded(key:String) -> void:
 	InputMap.action_erase_events(eventAction)
 	code = str_to_var(key)
+	
 	var event : InputEvent
 	if isMouse:
 		event = InputEventMouseButton.new()
@@ -53,4 +59,5 @@ func loaded(key:String) -> void:
 	else:
 		event = InputEventKey.new()
 		event.keycode = code
+	
 	InputMap.action_add_event(eventAction,event)

@@ -10,4 +10,5 @@ roughness_texture = ExtResource("3_iq7ni")
 normal_enabled = true
 normal_scale = 4.0
 normal_texture = ExtResource("2_by0hr")
-uv1_scale = Vector3(50, 50, 50)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 150.0

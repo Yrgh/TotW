@@ -1,23 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://xlnmh4ct0m4d"]
+[gd_scene load_steps=4 format=3 uid="uid://xlnmh4ct0m4d"]
 
 [ext_resource type="Script" path="res://Scripts/LoadingBit.gd" id="1_ffets"]
-[ext_resource type="Script" path="res://Scripts/ControlUpdrAssigner.gd" id="2_bbndj"]
-[ext_resource type="Script" path="res://Scripts/ChangeCtrl.gd" id="3_xhwlc"]
-[ext_resource type="Script" path="res://Scripts/ShowPerf.gd" id="4_ca1af"]
-[ext_resource type="Script" path="res://Scripts/ResetCtrls.gd" id="4_p2w4d"]
-[ext_resource type="Script" path="res://Scripts/DebugWindowToggle.gd" id="5_u27kt"]
-[ext_resource type="Script" path="res://Scripts/UndoSettings.gd" id="6_dj81i"]
-[ext_resource type="Script" path="res://Scripts/SaveSettings.gd" id="8_vmgkk"]
-
-[sub_resource type="GDScript" id="GDScript_d3wgy"]
-script/source = "extends Button
-
-@onready var container := $'..'
-
-func _pressed() -> void:
-	container.save()
-	Global.change_scene('res://Scenes/main_menu.tscn')
-"
+[ext_resource type="Script" path="res://Scripts/settings_page.gd" id="1_q1pxx"]
+[ext_resource type="PackedScene" uid="uid://cxng6vx4ghx03" path="res://Scene Objs/settings.tscn" id="2_ynx2q"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -26,9 +11,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_q1pxx")
 
 [node name="Loading" type="ColorRect" parent="."]
-visible = false
 z_index = 4096
 layout_mode = 0
 offset_right = 1e+06
@@ -39,197 +24,20 @@ script = ExtResource("1_ffets")
 
 [node name="BG" type="ColorRect" parent="."]
 z_index = -1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+layout_mode = 2
+offset_right = 10000.0
+offset_bottom = 100000.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color(0.160784, 0.392157, 0.501961, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 25
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 25
-theme_override_constants/margin_bottom = 10
-
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
-clip_contents = false
-layout_mode = 2
-follow_focus = true
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 25
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 25
-theme_override_constants/margin_bottom = 10
-
-[node name="GridContainer" type="GridContainer" parent="MarginContainer/ScrollContainer/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/h_separation = 12
-theme_override_constants/v_separation = 6
-columns = 2
-script = ExtResource("2_bbndj")
-
-[node name="DestinationLabel" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Profile: "
-
-[node name="Destination" type="LineEdit" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Controls"
-placeholder_text = "Enter Here"
-expand_to_text_length = true
-
-[node name="Jump" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Jump / Climb"
-
-[node name="JumpKey" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
-layout_mode = 2
-text = "[SPACE]"
-script = ExtResource("3_xhwlc")
-
-[node name="Forward" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Walk Forward"
-
-[node name="ForwardKey" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
-layout_mode = 2
-text = "[W]"
-script = ExtResource("3_xhwlc")
-
-[node name="Back" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Walk Backwards"
-
-[node name="BackKey" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
-layout_mode = 2
-text = "[S]"
-script = ExtResource("3_xhwlc")
-
-[node name="Left" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Strafe Left"
-
-[node name="LeftKey" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
-layout_mode = 2
-text = "[A]"
-script = ExtResource("3_xhwlc")
-
-[node name="Right" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Strafe Right"
-
-[node name="RightKey" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
-layout_mode = 2
-text = "[D]"
-script = ExtResource("3_xhwlc")
-
-[node name="FocusHold" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Concentrate (Hold)"
-
-[node name="FocusHoldKey" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
-layout_mode = 2
-text = "[C]"
-script = ExtResource("3_xhwlc")
-
-[node name="FocusToggle" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Concntrate (Toggle)"
-
-[node name="FocusToggleKey" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
-layout_mode = 2
-text = "[V]"
-script = ExtResource("3_xhwlc")
-
-[node name="Sprint" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Sprint"
-
-[node name="SprintKey" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
-layout_mode = 2
-text = "[SHIFT]"
-script = ExtResource("3_xhwlc")
-
-[node name="Item" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Drop / Pick Up"
-
-[node name="ItemKey" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
-layout_mode = 2
-text = "[Q]"
-script = ExtResource("3_xhwlc")
-
-[node name="ZoomIn" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Zoom In"
-
-[node name="ZoomInKey" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
-layout_mode = 2
-text = "[Q]"
-script = ExtResource("3_xhwlc")
-
-[node name="ZoomOut" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Zoom Out"
-
-[node name="ZoomOutKey" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer" groups=["ControlSetting"]]
-layout_mode = 2
-text = "[Q]"
-script = ExtResource("3_xhwlc")
-
-[node name="ShowPerfToggle" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Show Performance
-"
-
-[node name="ShowPerfButton" type="CheckButton" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-script = ExtResource("4_ca1af")
-
-[node name="SmallWindow" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Debug Window
-"
-
-[node name="DebugWindowToggle" type="CheckButton" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-script = ExtResource("5_u27kt")
-
-[node name="Reset" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Reset to Defaults"
-script = ExtResource("4_p2w4d")
-
-[node name="Esc" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Exit"
-script = SubResource("GDScript_d3wgy")
-
-[node name="Undo" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Revert Changes & Load Profile"
-script = ExtResource("6_dj81i")
-
-[node name="Save" type="Button" parent="MarginContainer/ScrollContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Save Changes"
-script = ExtResource("8_vmgkk")
+[node name="MarginContainer" parent="." instance=ExtResource("2_ynx2q")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
