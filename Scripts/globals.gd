@@ -5,6 +5,8 @@ var staminaOut = false
 
 var perf_shown = false
 
+var vfx_shown = true
+
 var player_position := Vector3()
 
 const CD_F = 1.5

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cxng6vx4ghx03"]
+[gd_scene load_steps=11 format=3 uid="uid://cxng6vx4ghx03"]
 
 [ext_resource type="Script" path="res://Scripts/ScrollContainer.gd" id="1_5ycv7"]
 [ext_resource type="Script" path="res://Scripts/ControlUpdrAssigner.gd" id="1_cgn5c"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Scripts/ChangeCtrl.gd" id="3_yseb3"]
 [ext_resource type="Script" path="res://Scripts/DebugWindowToggle.gd" id="4_tdbax"]
 [ext_resource type="Script" path="res://Scripts/ResetCtrls.gd" id="5_p4cxv"]
+[ext_resource type="Script" path="res://Scripts/VFXToggle.gd" id="6_dvjrd"]
 [ext_resource type="Script" path="res://Scripts/UndoSettings.gd" id="6_m6t36"]
 [ext_resource type="Script" path="res://Scripts/SaveSettings.gd" id="7_lnhlv"]
 
@@ -196,6 +197,15 @@ text = "Debug Window
 [node name="DebugWindowToggle" type="CheckButton" parent="ScrollContainer/Container/GridContainer"]
 layout_mode = 2
 script = ExtResource("4_tdbax")
+
+[node name="VFX" type="Label" parent="ScrollContainer/Container/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Fancy Effects"
+
+[node name="VFXToggle" type="CheckButton" parent="ScrollContainer/Container/GridContainer"]
+layout_mode = 2
+script = ExtResource("6_dvjrd")
 
 [node name="Reset" type="Button" parent="ScrollContainer/Container/GridContainer"]
 layout_mode = 2

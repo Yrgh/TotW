@@ -17,6 +17,7 @@ extends GridContainer
 
 @onready var show_perf := $ShowPerfButton
 @onready var debug_window := $DebugWindowToggle
+@onready var vfx := $VFXToggle
 
 @onready var destination_text := $Destination
 
@@ -63,6 +64,7 @@ func reset() -> void:
 	
 	show_perf.button_pressed = false
 	debug_window.button_pressed = false
+	vfx.button_pressed = true
 
 var destination := "Controls"
 func _ready() -> void:
@@ -101,6 +103,7 @@ func save():
 	
 	save_data(save_file,"show_perf",show_perf.button_pressed)
 	save_data(save_file,"debug_window",debug_window.button_pressed)
+	save_data(save_file,"vfx",vfx.button_pressed)
 	
 
 func save_keybind(save_file,typename:String,node):
@@ -218,4 +221,6 @@ func set_toggleData(var_name,data):
 			show_perf.button_pressed = str_to_var(data)
 		"debug_window":
 			debug_window.button_pressed = str_to_var(data)
+		"vfx":
+			vfx.button_pressed = str_to_var(data)
 	

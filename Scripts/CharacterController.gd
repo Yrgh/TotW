@@ -260,3 +260,4 @@ func _process(delta: float) -> void:
 	fpsText.visible = Global.perf_shown
 	if Global.perf_shown:
 		fpsText.text = "FPS: " + str(1/delta)
+	$'Eyes/Camera SpringArm/Camera/PostProcess'.visible = Global.vfx_shown
