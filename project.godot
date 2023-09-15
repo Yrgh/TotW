@@ -24,6 +24,10 @@ M="*res://Scripts/Math.gd"
 
 window/vsync/vsync_mode=3
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/proton_scatter/plugin.cfg")
+
 [input]
 
 forward={
@@ -91,7 +95,47 @@ item={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":81,"key_label":0,"unicode":113,"echo":false,"script":null)
 ]
 }
+inven={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":69,"key_label":0,"unicode":101,"echo":false,"script":null)
+]
+}
 
 [rendering]
 
 environment/screen_space_reflection/roughness_quality=3
+
+[shader_globals]
+
+WIND_SPEED={
+"type": "float",
+"value": 0.05
+}
+WIND_DIR={
+"type": "vec2",
+"value": Vector2(0.75, 1)
+}
+WIND_POW={
+"type": "float",
+"value": 2.0
+}
+terrain_map={
+"type": "sampler2D",
+"value": "res://GlobalItems/TerrainHeight.tres"
+}
+terrain_amplitude={
+"type": "float",
+"value": 0.0
+}
+terrain_offset={
+"type": "float",
+"value": 0.0
+}
+zNear={
+"type": "float",
+"value": 0.05
+}
+zFar={
+"type": "float",
+"value": 4000.0
+}
