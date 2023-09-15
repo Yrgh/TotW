@@ -7,12 +7,12 @@ const SPRINT_SPEED = 2.5
 const TIRED_SPEED = 0.75
 
 const JUMP_SPEED_BONUS = 3.0
-const JUMP_VELOCITY = 1.5
+const JUMP_VELOCITY = 3.5
 
 #Although the character is already above-average,
 #we multiply their attributes to make the player
 #feel more powerful and not slow
-const POWER_MULTIPLIER = 3.0
+const POWER_MULTIPLIER = 2.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -134,7 +134,7 @@ func _physics_process(delta: float) -> void:
 	
 	if (!menu.visible && Input.is_action_pressed('focus(hold)') || Global.ATSon) && !Global.staminaOut:
 		Global.applicableTimeScale = .125
-		Global.stamina -= delta * 21
+		Global.stamina -= delta * 14
 		fov = 60
 		graphics.adjustment_contrast = 1.4
 		graphics.adjustment_saturation = 0.3
