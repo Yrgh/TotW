@@ -49,7 +49,7 @@ vec3 get_position_from_transform(mat4 transform) {
 		transform[3][2]);
 }
 
-void start() {
+void process() {
 	//vec3 normal = (use_normal)? texture(terrain_normal, target_position.xz).xyz :vec3(1.0,0.0,0.0);
 	vec3 position = vec3(0.0);
 	float seed = 0.0;
@@ -59,17 +59,24 @@ void start() {
 	position.x = mod(position.z,rows);
 	position.z = (position.z - position.x) / rows;
 	
+	position = trunc(position);
+	
+	vec3 int_pos = position;
+	
 	position.x -= 0.5 * rows;
 	position.z -= 0.5 * rows;
 	
 	position.x *= spacing;
 	position.z *= spacing;
 	
-	position += emitter_pos - mod(emitter_pos,spacing);
+	position += emitter_pos - mod(emitter_pos,1.0);
+	int_pos += trunc(emitter_pos);
 	
-	seed = -position.x;
-	seed += seed * position.z;
-	seed = mod(seed,rows) + position.z;
+	int_pos = trunc(int_pos);
+	
+	seed = -int_pos.x;
+	seed += seed * int_pos.z;
+	seed = mod(seed,rows) + int_pos.z;
 	
 	position.x += (2.0 * jitter - 1.0) * hash(seed*.965);
 	position.z += (2.0 * jitter - 1.0) * hash(seed*.877); 

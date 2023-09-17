@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://dn8rg714s85jw"]
+[gd_scene load_steps=51 format=3 uid="uid://dn8rg714s85jw"]
 
 [ext_resource type="Script" path="res://Scripts/Stamina.gd" id="1_kgha5"]
 [ext_resource type="Script" path="res://Scripts/IGMenu.gd" id="2_6quxe"]
@@ -7,7 +7,6 @@
 [ext_resource type="Script" path="res://Scripts/SettingsMenu.gd" id="3_ntnsy"]
 [ext_resource type="Material" uid="uid://by4ner6axox2t" path="res://Materials/Wall.tres" id="3_wo4oa"]
 [ext_resource type="ArrayMesh" uid="uid://chfngys5vflee" path="res://Models/overhang.obj" id="4_ebxkp"]
-[ext_resource type="Script" path="res://Scripts/Enemy.gd" id="7_yb5dk"]
 [ext_resource type="ArrayMesh" uid="uid://1qmufupg5d3j" path="res://Models/spear.obj" id="8_farpw"]
 [ext_resource type="Material" uid="uid://duelur6andoqh" path="res://Materials/HardWood.tres" id="9_4n37d"]
 [ext_resource type="Texture2D" uid="uid://cnoq8ony7i7xv" path="res://texture_leafy_grass/leafy_grass_diff_1k.png" id="9_q80uf"]
@@ -21,6 +20,7 @@
 [ext_resource type="Material" uid="uid://dbumy5ayf0css" path="res://Materials/Invis.tres" id="12_lcjjl"]
 [ext_resource type="Material" uid="uid://cbuovrrwe2m48" path="res://Materials/Eyes.tres" id="13_wtw0s"]
 [ext_resource type="Script" path="res://Scripts/Hip.gd" id="14_apmcf"]
+[ext_resource type="Script" path="res://Scripts/Nodes/Enemy.gd" id="15_py0we"]
 [ext_resource type="ArrayMesh" uid="uid://di00w6ce78cra" path="res://Models/better_grass.tres" id="18_ev7pn"]
 [ext_resource type="Shader" path="res://Shaders/ParticleGrass.gdshader" id="19_w1oq6"]
 [ext_resource type="Shader" path="res://Shaders/PostProcess1.gdshader" id="23_ei1bu"]
@@ -87,6 +87,12 @@ volumetric_fog_density = 0.01
 volumetric_fog_anisotropy = 0.5
 adjustment_enabled = true
 adjustment_contrast = 1.1
+
+[sub_resource type="LabelSettings" id="LabelSettings_s1eon"]
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 0.647059)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a1ncu"]
 bg_color = Color(0.498039, 0.498039, 0.498039, 0.0588235)
@@ -185,8 +191,10 @@ size = Vector3(0.25, 0.5, 0.25)
 
 [node name="ParticleGrass" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.11323)
+visible = false
 cast_shadow = 2
-amount = 22250
+amount = 22500
+lifetime = 16.0
 explosiveness = 1.0
 visibility_aabb = AABB(-200, -5000, -200, 400, 10000, 400)
 process_material = SubResource("ShaderMaterial_px0hx")
@@ -242,6 +250,7 @@ script = ExtResource("1_kgha5")
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
+label_settings = SubResource("LabelSettings_s1eon")
 
 [node name="Menu" type="TabContainer" parent="UI"]
 visible = false
@@ -355,7 +364,7 @@ shape = SubResource("ConcavePolygonShape3D_b2558")
 
 [node name="Enemy" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.355, 4, -54.1304)
-script = ExtResource("7_yb5dk")
+script = ExtResource("15_py0we")
 
 [node name="Visual" type="MeshInstance3D" parent="Enemy"]
 mesh = SubResource("BoxMesh_y6sv4")
@@ -366,6 +375,7 @@ shape = SubResource("ConvexPolygonShape3D_7nbs3")
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="Enemy"]
 
 [node name="Spear" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.09067, 0)
 disable_mode = 1
 mass = 10.0
 center_of_mass_mode = 1
@@ -386,10 +396,9 @@ shape = SubResource("ConvexPolygonShape3D_0wvwb")
 [node name="PlayerContainer" type="Node3D" parent="."]
 
 [node name="Player" type="CharacterBody3D" parent="PlayerContainer"]
-process_priority = 1
-process_physics_priority = 1
 floor_stop_on_slope = false
-floor_block_on_wall = false
+floor_max_angle = 1.0472
+platform_wall_layers = 4294967295
 script = ExtResource("10_c4vll")
 
 [node name="Player" type="MeshInstance3D" parent="PlayerContainer/Player"]

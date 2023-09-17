@@ -6,13 +6,13 @@ const SPRINT_SPEED = 2.5
 #When drowsy OR out of stamina
 const TIRED_SPEED = 0.75
 
-const JUMP_SPEED_BONUS = 3.0
-const JUMP_VELOCITY = 3.5
+const JUMP_SPEED_BONUS = 4.0
+const JUMP_VELOCITY = 2.0
 
 #Although the character is already above-average,
 #we multiply their attributes to make the player
 #feel more powerful and not slow
-const POWER_MULTIPLIER = 2.0
+const POWER_MULTIPLIER = 2.5
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -45,6 +45,8 @@ func fix_tool() -> void:
 	if toolHeld:
 		tool.position = position + Vector3(0.654,1.423,-1.74) * transform.basis.inverse()
 		tool.rotation = rotation + Vector3(deg_to_rad(-18.3),deg_to_rad(180),0)
+	elif M.pythag3d(tool.linear_velocity) > 5.0:
+		tool.look_at(tool.global_position - tool.linear_velocity)
 	
 	tool.get_node('CollisionShape3D').disabled = toolHeld
 	
@@ -58,7 +60,6 @@ func throw_tool() -> void:
 	var throw_dir = (Vector3(0,0,-1).normalized() * transform.basis.inverse()).rotated(Vector3(1,0,0),head.rotation.x)
 	tool.linear_velocity = velocity + throw_dir * 15 + Vector3(0,10,0)
 	tool.angular_velocity = f_to_v3(0)
-	tool.rotation = tool.rotation.rotated(tool.linear_velocity.normalized(),f_to_v3(0).angle_to(tool.linear_velocity))
 	toolHeld = false
 
 func diamond(v: Vector2):
